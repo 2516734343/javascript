@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id='start'>start</button>
+  <button id='cancel'>cancel</button>
+  <script type="text/javascript">
+    class cancelTocken {
+      constructor(cancelCallback) {
+        this.promise = new Promise((resolve, reject) => {
+          cancelCallback(() => {
+            setTimeout(console.log, 0, 'delay cancelled');
+            resolve();
+          });
+        })
+      }
+    }
+    
+    const startButton = document.getElementById('start');
+    const cancelButton = document.getElementById('cancel');
+    
+    
+    function cancelDelayResolved(delay) {
+      setTimeout(console.log, 0, 'set delay');
+      return new Promise((resolve, reject) => {
+        const id = setTimeout(() => {
+          setTimeout(console.log, 0, 'delay resolved');
+          resolve();
+        }, delay);
+        const cancelTockens = new cancelTocken((cancelCallback) => {
+          cancelButton.addEventListener('click', cancelCallback);
+    
+        })
+        cancelTockens.promise.then(() => {console.log('cancel');clearTimeout(id)});
+      })
+    }
+    startButton.addEventListener('click', () => cancelDelayResolved(1000));
+  </script>
+  <script type="text/javascript" src="./notifyPromise.js"></script>
+</body>
+</html>

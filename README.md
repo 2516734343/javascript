@@ -1,6 +1,6 @@
 # javascript 学习记录
 
-[toc]
+[TOC]
 
 # 执行上下文和执行栈
 

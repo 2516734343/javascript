@@ -28,8 +28,125 @@ javascript 学习记录
 
 # 闭包
 
+# 防抖、节流、柯理化
+
+- 防抖
+
+  > 防抖原理： 如果持续触发事件，在事件停止触发 n 秒后才执行，如果在 n 秒内触发了多次，以最后一次触发为准
+  >
+  > 防抖应用：
+
+  > - window 的 resize、scroll
+  > - 输入框搜索
+
+  ```javascript
+  // 1. 实现一个基本的
+  // 2. 考虑this指向
+  // 3. 考虑传参
+  // 4. 立即执行,可以加一个immediate
+  // 5.取消防抖
+  function debouce(func, wait, immediate) {
+    let timer = null;
+    return function () {
+      const context = this;
+      const args = [...arguments];
+      if (timer) {
+        clearTimeout(timer);
+      }
+      if (immediate) {
+        // 没有定时器，首次执行
+        if (!timer) {
+          func.apply(context, args);
+        }
+        clearTimeout(timer);
+        // 设置定时器,延迟执行
+        timer = setTimeout(function () {
+          func.apply(context, args);
+          timer = null;
+        }, wait);
+      } else {
+        timer = setTimeout(function () {
+          func.apply(context, args);
+        }, wait);
+      }
+    };
+    debouce.cancel = function () {
+      clearTimeout(timer);
+      timer = null;
+    };
+  }
+  ```
+
+- 节流
+
+  > 如果你持续触发事件，每隔 n 秒，只执行一次事件。
+
+  1. 使用时间戳： 第一次会立即执行，停止事件触发后不会再执行事件。
+
+  ```javascript
+  function throttle(fn, wait) {
+    let previous = 0;
+    return function () {
+      const context = this;
+      let now = new Date();
+      if (now - previous > wait) {
+        // 当前时间大于约定时间
+        fn.apply(context, arguments);
+        previous = now;
+      }
+    };
+  }
+  ```
+
+  2. 使用定时器：第一次不会立即执行，停止事件触发后的一段时间会再执行一次。
+
+  ```javascript
+  function throttle(fn, wait) {
+    let timer, context, args;
+    return function () {
+      context = this;
+      args = arguments;
+      if (!timer) {
+        // 如果定时器存在，则不执行,不存在，则执行定时器，执行函数，
+        timer = setTimeout(function () {
+          timer = null;
+          fn.apply(context, args);
+        }, wait);
+      }
+    };
+  }
+  ```
+
+- 柯里化
+
+  > 柯里化是一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术
+  > 用闭包把参数保存起来，当参数的数量足够执行函数了，就开始执行函数
+
+  ```javascript
+  function curry(func) {
+    // 取参数
+    let args = [].slice.call(arguments, 1);
+    return function () {
+      let curArguments = [].slice.call(arguments, 0);
+      let totalArguments = args.concat(curArguments);
+      if (totalArguments.length >= func.length) {
+        return func.apply(this, totalArguments);
+      } else {
+        totalArguments.unshift(func);
+        return curry.apply(this, totalArguments);
+      }
+    };
+  }
+
+  let add = curry(sum, 1);
+
+  console.log(add(2, 3));
+  console.log(add(2)(3));
+  ```
+
 # 原型和原型链
 
+![Image text](./原型和原型链/prototype.png)
 原型和原型链的运用：
 
 - new 操作符的实现
@@ -86,3 +203,33 @@ let car = new Car();
 console.log(instanceOF(car, Object));
 console.log(instanceOF(car, Car));
 ```
+
+# 继承
+
+- 原型链继承
+  - 引用类型的属性会被所有实例共享
+  - 无法向父类传参
+- 构造函数继承
+  - 每次创建实例都会创建一遍方法
+- 组合继承：原型链+构造函数
+  - 会两次调用父类构造函数
+- 原型式继承
+  ```javascript
+  function inherit(obj) {
+    function F() {}
+    F.prototype = obj;
+    return new F();
+  }
+  ```
+- 寄生式继承
+  - 在内部以某种方法增强对象
+- 寄生组合式继承
+  ```javascript
+  function inherit(target, origin) {
+    function F() {}
+    F.prototype = origin.prototype;
+    let f = new F();
+    f.constructor = target;
+    target.prototype = f;
+  }
+  ```

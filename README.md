@@ -249,3 +249,40 @@ console.log(instanceOF(car, Car));
     target.prototype = f;
   }
   ```
+
+---
+
+## var/let/const
+
+- 本质区别？
+
+参考：
+[ES6 系列之 let 和 const ](https://github.com/mqyqingfeng/Blog/issues/82)
+
+## 箭头函数
+
+- 与普通函数的区别？
+  - this 指向最近一层非箭头函数的 this
+  - 没有 arguments
+  - 没有构造函数，所以不能使用 new
+
+参考：
+[ES6 系列之箭头函数](https://github.com/mqyqingfeng/Blog/issues/85)
+
+## set&map
+
+### set
+
+#### 基本用法
+
+- 一种新的数据结构，每一个值都是唯一的
+- Set 函数可以接受一个数组（或者具有 iterable 接口的其他数据结构）作为参数，用来初始化
+- set 在使用 add 时，去除重复值用的是`===`， 但是对于 NaN,在 add 时只能保存一个
+
+#### 实例属性和方法
+
+- 有 API： `add`, `delete`, `clear`,`has`,`size`
+
+#### 遍历操作
+
+-` keys()`、`values()`、`entries()`、 `forEach()`

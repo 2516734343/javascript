@@ -269,20 +269,41 @@ console.log(instanceOF(car, Car));
 参考：
 [ES6 系列之箭头函数](https://github.com/mqyqingfeng/Blog/issues/85)
 
-## set&map
+## set&map&weakSet&weakMap
 
 ### set
 
-#### 基本用法
+- 基本用法
 
-- 一种新的数据结构，每一个值都是唯一的
-- Set 函数可以接受一个数组（或者具有 iterable 接口的其他数据结构）作为参数，用来初始化
-- set 在使用 add 时，去除重复值用的是`===`， 但是对于 NaN,在 add 时只能保存一个
+  - 一种新的数据结构，每一个值都是唯一的
+  - Set 函数可以接受一个数组（或者具有 iterable 接口的其他数据结构）作为参数，用来初始化
+  - set 在使用 add 时，去除重复值用的是`===`， 但是对于 NaN,在 add 时只能保存一个
 
-#### 实例属性和方法
+- 实例属性和方法
 
-- 有 API： `add`, `delete`, `clear`,`has`,`size`
+  - 有 API： `add`, `delete`, `clear`,`has`,`size`
 
-#### 遍历操作
+- 遍历操作
 
--` keys()`、`values()`、`entries()`、 `forEach()`
+- ` keys()`、`values()`、`entries()`、 `forEach()`
+
+### map
+
+- 基本用法
+
+  - Map 数据结构类似于对象，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
+
+- 实例属性和方法
+
+  - 有 API： `set`,`get`,`add`, `delete`, `clear`,`has`,`size`
+
+- 遍历操作
+
+  -` keys()`、`values()`、`entries()`、 `forEach()`
+
+### weakSet/weakMap
+
+- 与 set/map 的区别在于：
+  - 健只能是对象。
+  - 对健是弱引用，当健所引用的对象被垃圾回收机制回收时，set/map 会自动删除对该健的引用。
+  - 因为上述原因二，所以 weakSet/weakMap 是不可遍历的。

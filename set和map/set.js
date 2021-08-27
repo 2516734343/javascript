@@ -1,7 +1,9 @@
 
 // // 1、实现一个set
 // // 2、处理特殊场景  NaN
-// 3、不仅要考虑传参数为数组，可迭代对象都可以作为参数，字符串也可以。 for of，
+
+// @TODO
+// 3、不仅要考虑传参数为数组，可迭代对象都可以作为参数，字符串也可以。 for of
 const NaNSymbol = Symbol(NaN);
 class Set {
   _values = [];

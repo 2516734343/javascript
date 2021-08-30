@@ -269,7 +269,7 @@ console.log(instanceOF(car, Car));
 参考：
 [ES6 系列之箭头函数](https://github.com/mqyqingfeng/Blog/issues/85)
 
-## set&map&weakSet&weakMap
+## set/map & weakSet/weakMap
 
 ### set
 
@@ -307,3 +307,25 @@ console.log(instanceOF(car, Car));
   - 健只能是对象。
   - 对健是弱引用，当健所引用的对象被垃圾回收机制回收时，set/map 会自动删除对该健的引用。
   - 因为上述原因二，所以 weakSet/weakMap 是不可遍历的。
+
+## defineProperty 和 proxy
+
+- defineProperty
+
+  - `Object.defineProperty(obj, props, description)`
+  - description 属于属性描述符，分为：数据描述符和存取描述符
+    - 公共有的：`configurable`,`enumerable`。
+    - 数据描述符：`value`,`writable`。
+    - 存取描述符：`set`,`get`。
+
+- proxy
+  - `var proxy = new Proxy(target, handler);` target 为目标对象，handler 代表拦截行为构成的对象
+  - proxy 代理对象后，目标对象内部的 this 指向 proxy
+
+**二者区别**
+| defineProperty | proxy |
+| ---- | ---- |
+| 代理的是属性 | 代理的是对象 |
+| 监听原对象 | 监听返回的代理对象 |
+| 只能拦截 get 和 set 方法 | 不仅仅是 get 和 set 方法，可以拦截的方法多达 13 种 |
+| 可以拦截数组的变化 | 无法拦截数组的变化 |

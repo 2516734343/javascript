@@ -13,7 +13,7 @@
 
 // 实现
 class EventEmitter {
-  // 订阅者 事件及监听者
+  // 订阅者 监听者
   constructor() {
     this.listener = {};
   }

@@ -37,3 +37,31 @@ class Child extends Person {
 let child = new Child('xll', 18);
 child.sayAge();
 child.say();
+
+// es5实现的类
+
+// 构造函数
+function Persons(name) {
+  this.name = name;
+}
+// 静态属性
+Persons.staticName = 'kidi';
+// 静态方法
+Persons.sayHello = function () {
+  console.log('static hello')
+}
+Persons.prototype.says = function () {
+  console.log('says');
+}
+
+// 继承
+
+function Children(age) {
+  Persons.call(this);
+  this.age = age;
+}
+
+Children.prototype = Object.create(Persons.prototype);
+let children = new Children(19);
+
+children.says();

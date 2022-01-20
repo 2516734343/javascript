@@ -1,84 +1,43 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <style>
-     .Steps {
-   height: 100px;
+<style>
+ .box {
+   width: 10px;
+   height: 10px;
+   border: 1px solid red;
+   margin: 2px;
+   padding: 2px;
+   background: blue;
  }
-  .Steps li {
-   padding: 0px 0px 0 20px;
-   line-height: 30px;
-   background: #D4D4D4;
-   display: inline-block;
-   color: #fff;
-   position: relative;
-   float: left;
-   font-size: 12px;
-   margin-right: 5px;
-  }
-  .Steps li:after {
-   content: '';
-   display: block;
-   border-top: 15px solid #D4D4D4;
-   border-bottom: 15px solid #D4D4D4;
-   border-left: 15px solid #fff;
-   position: absolute;
-   right: -15px;
-   top: 0;
-  }
-  .Steps li:after {
-   content: '';
-   display: block;
-   border-top: 15px solid transparent;
-   border-bottom: 15px solid transparent;
-   border-left: 15px solid #D4D4D4;
-   position: absolute;
-   right: -15px;
-   top: 0;
-   z-index: 10;
-  }
-  .Steps li:before {
-   content: '';
-   display: block;
-   border-top: 15px solid #D4D4D4;
-   border-bottom: 15px solid #D4D4D4;
-   border-left: 15px solid #fff;
-   position: absolute;
-   left: 0px;
-   top: 0;
-  }
-  .Steps li:first-child {
-   border-radius: 4px 0 0 4px;
-   padding-left: 25px;
-  }
-  .Steps li:first-child:before {
-   display: none;
-  }
-  .Steps li.active {
-   /* background-color: #019BF2; */
-   border: 1px solid #019BF2;
-  }
-  .Steps li.active:after {
-   border-left-color: #019BF2;
-  }
-  .Steps li.active:before {
-   border-top-color: #019BF2;
-   border-bottom-color: #019BF2;
-  }
-  </style>
+ 
+ #borderBox {
+   box-sizing: border-box;
+ }
+ 
+ #contentBox {
+   box-sizing: content-box;
+ }
+
+.blue {
+    color: blue;
+}
+.green {
+    color: green;
+}
+.orange {
+    color: orange;
+}
+.red {
+    color: red;
+}
+</style>
 </head>
 <body>
-  <ul class="Steps">
-    　<li class="active">T0 初步接触</li>
-    　<li class="active">T1 确立目标</li>
-      <li class="active">T2 开发攻关</li>
-    　<li>T3 实现成交</li>
-      <li>T4 做大做深</li>
-      <li>T5 战略合作</li>
-   </ul>
+<!-- <div>请问下面两个 div 元素，蓝***域的宽高各是多少像素？</div> -->
+<div id="borderBox" class="box">width=10px,实际宽度：10px-2px-4px=4px</div>
+<div id="contentBox" class="box">width=10px+2px+4px=16px</div>
+<div class="orange red green blue">text</div>
 </body>
 </html>

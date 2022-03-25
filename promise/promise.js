@@ -1,5 +1,5 @@
 
-function Promise(callback) {
+function MyPromise(callback) {
   this.status = 'pendding';
   this.value = '';
   // this.onFuillfiled = null;
@@ -32,31 +32,91 @@ function Promise(callback) {
       self.onRejectedCallbacks.forEach(callback => callback(self.value));
     })
   }
-  callback(resolve, reject)
+  callback(resolve, reject);
 }
-Promise.prototype.then = function (onFuillfiled, onRejected) {
+MyPromise.prototype.then = function (onFuillfiled, onRejected) {
+  let backPromise;   // 链式调用
   if (this.status === 'pendding') {
     // this.onFuillfiled = onFuillfiled;
     // this.onRejected = onRejected;
-    this.onFuillfiledCallbacks.push(onFuillfiled);
-    this.onRejectedCallbacks.push(onRejected);
-  } else if (this.status === 'fullfiled') {
-    console.log('then');
-    onFuillfiled(this.value);
-  } else {
-    onRejected(this.value)
+    return backPromise = new MyPromise((resolve, reject) => {
+      this.onFuillfiledCallbacks.push((value) => {
+        try {
+          let x = onFuillfiled(value);
+          // resolve(x);
+          resolvePromise(x, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+      });
+      this.onRejectedCallbacks.push((value) => {
+        try {
+          let x = onRejected(value);
+          // resolve(x);
+          resolvePromise(x, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
   }
-  return this; // 链式调用
+  if (this.status === 'fullfiled') {
+    return backPromise = new MyPromise((resolve, reject) => {
+      try {
+        let res = onFuillfiled(this.value);
+        // 处理返回值
+        resolvePromise(res, resolve, reject);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  } else {
+    return backPromise = new MyPromise((resolve, reject) => {
+      try {
+        let res = onRejected(this.value);
+        // 处理返回值
+        resolvePromise(res, resolve, reject);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
 }
 
-const p = new Promise((resolve, reject) => {
+function resolvePromise(back, resolve, reject) {
+  if (back instanceof MyPromise) {
+    if (back.status === 'pendding') {
+      back.then((data) => {
+        resolvePromise(data, resolve, reject);
+      }, err => {
+        reject(err);
+      })
+    } else {
+      back.then(resolve, reject);
+    }
+  } else {
+    resolve(back);
+  }
+}
+
+let readFile = function (flag, value) {
+  return new MyPromise((resolve, reject) => {
+    if (flag) {
+      resolve(value);
+    } else {
+      reject('field');
+    }
+  })
+}
+const p = new MyPromise((resolve, reject) => {
   resolve(2);
 }).then((value) => {
-  console.log(value);
-  return 3;
+  console.log(value, '-----');
+  return readFile(true, '3---');
 }).then((value) => { // 如果要支持链式操作，则需要将回调函数存成数组的形式
-  console.log(3);
+  console.log(value, '-----1');
 })
+// console.log(p);
 // 串行执行异步操作  todo
 
 // 实现promise.all
@@ -91,38 +151,3 @@ Promise.prototype.race = function (promises) {
     }
   })
 }
-class Parent {
-  name = '111';
-  constructor(sex, name) {
-    this.sex = sex;
-    this.name = name;
-  }
-}
-
-class Child extends Parent {
-  name = 'xxx';
-  constructor(age, sex, name) {
-    super(sex, name);// 相当于执行了父类的构造函数
-    this.age = age;
-    // this.sex = 'nv';
-    this.sayHello = function () {
-      console.log(111);
-    }
-  }
-  say() {
-    console.log('say');
-  }
-  get weight() {
-    console.log('get');
-  }
-  set weight(value) {
-    console.log(value);
-  }
-}
-const parent = new Parent('woman', 'mmmm');
-console.log(parent);
-const child = new Child(20, 'man', 'mmm');
-console.log(child);
-console.log(child.name);
-console.log(child.sex);
-child.say();
